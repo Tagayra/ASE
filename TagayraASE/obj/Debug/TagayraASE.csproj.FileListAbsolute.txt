@@ -1,0 +1,10 @@
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\bin\Debug\TagayraASE.exe.config
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\bin\Debug\TagayraASE.exe
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\bin\Debug\TagayraASE.pdb
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.csproj.AssemblyReference.cache
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.Form1.resources
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.Properties.Resources.resources
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.csproj.GenerateResource.cache
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.csproj.CoreCompileInputs.cache
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.exe
+C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.pdb

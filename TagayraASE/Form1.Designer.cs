@@ -46,6 +46,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Run";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -75,9 +76,10 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(319, 22);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(469, 416);
+            this.pictureBox1.Size = new System.Drawing.Size(400, 400);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
             // button3
             // 
