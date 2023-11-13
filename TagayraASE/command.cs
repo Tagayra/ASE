@@ -82,13 +82,13 @@ namespace TagayraASE
         {
             if (onoroff.Equals(false))
             {
-               
+
                 g.DrawEllipse(command.pen, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);    //graphics to draw a circle
-            
-        }
+
+            }
             else if (onoroff.Equals(true))
             {
-                
+
                 g.FillEllipse(command.brush, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);
                 //pictureBox1.Refresh();
             }
@@ -99,24 +99,65 @@ namespace TagayraASE
         {
             if (onandoff.Equals(true))
             {
-                g.FillRectangle(command.brush, command.positionx- (width / 2), command.positiony - (height / 2), width, height);
+                g.FillRectangle(command.brush, command.positionx - (width / 2), command.positiony - (height / 2), width, height);
             }
             else if (onandoff.Equals(false))
             {
-               
+
                 g.DrawRectangle(command.pen, command.positionx - (width / 2), command.positiony - (height / 2), width, height);
 
             }
         }
 
+        public void DrawTriangle(Command command, Boolean onoroff, int sidelength)
+        {
+            if (onoroff.Equals(true))
+            {
+                float height = (float)(sidelength + Math.Sqrt(3) / 2);
+                double halfSide = sidelength / 2.0;
 
-        
+                // Calculate the coordinates of the vertices based on the midpoint
+                Point vertex1 = new Point((int)(command.positionx - halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
+                Point vertex2 = new Point((int)(command.positionx + halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
+                Point vertex3 = new Point(command.positionx, (int)(command.positiony + 2 * halfSide / Math.Sqrt(3)));
+
+                Point[] trianglePoints = new Point[]
+            {
+            vertex1,vertex2,vertex3
+
+            };
+                g = command.g;
+                g.FillPolygon(command.brush, trianglePoints);
+            }
+            else if (onoroff.Equals(false))
+            {
+                float height = (float)(sidelength + Math.Sqrt(3) / 2);
+                double halfSide = sidelength / 2.0;
+
+                // Calculate the coordinates of the vertices based on the midpoint
+                Point vertex1 = new Point((int)(command.positionx - halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
+                Point vertex2 = new Point((int)(command.positionx + halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
+                Point vertex3 = new Point(command.positionx, (int)(command.positiony + 2 * halfSide / Math.Sqrt(3)));
+
+                Point[] trianglePoints = new Point[]
+            {
+                vertex1,vertex2,vertex3
+
+            };
+
+                g = command.g;
+                g.DrawPolygon(command.pen, trianglePoints);
+
+            }
+
+
+
+
+        }
+
 
 
     }
-
-
-
 }     
 
 
