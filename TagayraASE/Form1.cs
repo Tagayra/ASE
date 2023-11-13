@@ -17,7 +17,9 @@ namespace TagayraASE
         Pen pen = new Pen(Color.HotPink, 2);
         Graphics g;
         
-        
+        /// <summary>
+        /// 
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -25,11 +27,21 @@ namespace TagayraASE
             g.Clear(Color.Gray);   
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g =e.Graphics;
