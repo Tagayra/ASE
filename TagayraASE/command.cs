@@ -78,6 +78,24 @@ namespace TagayraASE
         }
 
 
+        public void DrawCircle(Command command, Boolean onoroff, int radius)
+        {
+            if (onoroff.Equals(true))
+            {
+                g = command.g;
+                g.DrawEllipse(command.pen, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);    //graphics to draw a circle
+            
+        }
+            else if (onoroff.Equals(false))
+            {
+                g = command.g;
+                g.FillEllipse(command.brush, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);
+                //pictureBox1.Refresh();
+            }
+
+        }
+
+
     }
 
 
