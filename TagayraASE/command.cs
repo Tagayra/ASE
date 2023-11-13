@@ -16,7 +16,7 @@ namespace TagayraASE
         Boolean give = false;
         int xaxis2, yaxis2;
 
-        public Command(Graphics g, Pen pen, int positionx, int positiony) : base(g, pen, positionx, positiony)
+        public Command(Graphics g, Pen pen, int positionx, int positiony, Brush brush) : base(g, pen, positionx, positiony)
         {
 
         }
