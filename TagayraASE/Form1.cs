@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -198,6 +199,11 @@ namespace TagayraASE
                             }
 
                         }
+                        else
+                        {
+                           MessageBox.Show("try entering these colors yellow purple red orange");
+
+                        }
 
                        
 
@@ -263,5 +269,71 @@ namespace TagayraASE
 
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "\"Text Files (.txt)|*.txt|All Files|*.*";  
+            openFileDialog.DefaultExt = "txt";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+
+                    using (StreamReader reader = new StreamReader(openFileDialog.FileName))
+                    {
+                        while (!reader.EndOfStream)
+                        {
+
+                            string command = reader.ReadLine();
+                            string[] singlecommand = command.Split(' ');
+                            g.Clear(Color.SlateGray);  //clear pictureboard
+                            CommandsInCommandLine(singlecommand);
+                        }
+                    }
+                    MessageBox.Show("LOADED COMMAND");
+                }
+                catch
+                {
+                    MessageBox.Show("ERROR LOADING THE FILE");
+
+                }
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            saveFileDialog.DefaultExt = "txt";
+            saveFileDialog.AddExtension = true;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+
+                string[] storeLineInFile = textBox1.Lines;
+
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        foreach (string commandline in storeLineInFile)
+                        {
+                            writer.WriteLine(commandline);
+                        }
+                    }
+
+                    MessageBox.Show("File Has Been Saved");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There Was An Error in Saving The File");
+                }
+
+            }
+
+        }
     }
     }
