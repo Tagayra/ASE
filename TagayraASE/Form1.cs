@@ -12,21 +12,23 @@ namespace TagayraASE
 {
     public partial class Form1 : Form
     {
-        Bitmap bitmap1 = new Bitmap(458, 400);
-        Bitmap bitmap2 = new Bitmap(458, 400);
+        Bitmap bitmap1 = new Bitmap(400, 400);
+        Bitmap bitmap2 = new Bitmap(400, 400);
         Pen pen = new Pen(Color.HotPink, 2);
         Brush brush = new SolidBrush(Color.Black);
         Boolean GiveBoolForFillColor = false;
-        Color Backgroudcolor = Color.SlateGray;
+        Color Backgroudcolor = Color.Gray;
         Graphics g;
         Point penposition;
         
+
 
         /// <summary>
         /// 
         /// </summary>
         public Form1()
         {
+            penposition = new Point(10, 10);
             InitializeComponent();
             g = Graphics.FromImage(bitmap1);
             g.Clear(Color.Gray);   
@@ -44,7 +46,7 @@ namespace TagayraASE
             Graphics g =e.Graphics;
             g.DrawImageUnscaled(bitmap1, 0, 0);
             g.DrawImageUnscaled(bitmap2 , 0, 0);
-            g.DrawEllipse(pen,10,10,10,10);
+            e.Graphics.DrawEllipse(pen, penposition.X, penposition.Y, 10,10);
 
         }
 
@@ -56,17 +58,26 @@ namespace TagayraASE
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if (!string.IsNullOrEmpty(textBox1.Text))
+            if (!string.IsNullOrEmpty(textBox1.Text) & string.IsNullOrEmpty(textBox2.Text))
             {
-                string converttostring = textBox1.Lines.ToString();
+                
+                string[] converttostring = textBox1.Lines;
+                foreach (string commandline in converttostring)
+                {
+                    string stroreSinglelineCode = Convert.ToString(commandline);
+                    string[] addCommandToList = stroreSinglelineCode.Split(' ');
+                    CommandsInCommandLine(addCommandToList);          //function that runs all command 
+                }
 
 
             }
 
-            else if (!string.IsNullOrEmpty(textBox2.Text))
+            else if (!string.IsNullOrEmpty(textBox2.Text) & string.IsNullOrEmpty(textBox1.Text))
             {
-                string converttostring = textBox1.Text.ToString();
-                converttostring=converttostring.ToLower();
+                string converttostring = textBox2.Text.ToString();
+               // converttostring = converttostring.ToLower();
+                string[] getcommand = converttostring.Split(' ');
+                CommandsInCommandLine(getcommand);
 
 
             }
@@ -74,33 +85,25 @@ namespace TagayraASE
 
         }
 
-        private void textBox1_MouseDown(object sender, MouseEventArgs e)
+        
+
+
+        public void CommandsInCommandLine(string[] listForCommands)
         {
-
-        }
-
-        private void textBox2_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-
-        public void CommandsInCommandLine(string[] storesplitcommands)
-        {
-            //creating instances
+            
             Command command = new Command(g,pen,penposition.X, penposition.Y,brush);
            
                 
-                 if (storesplitcommands[0].Equals("rectangle"))
+                 if (listForCommands[0].Equals("rectangle"))
                 {
-                    string[] splitnumber = storesplitcommands[1].Split(',');
-                    Boolean width = (int.TryParse(splitnumber[0], out int valueforwidth));
-                    Boolean height = (int.TryParse(splitnumber[1], out int valueforheight));
-
+                   
+                    Boolean width = (int.TryParse(listForCommands[1], out int valueforwidth));
+                    Boolean height = (int.TryParse(listForCommands[2], out int valueforheight));
+            
                     if (width && height)
                     {
 
-                        //call the DrawRectangle method of Cursor Class
+                       
                         command.DrawRectangle(command, GiveBoolForFillColor, valueforheight, valueforwidth);
                         pictureBox1.Refresh();
                     }
@@ -111,14 +114,14 @@ namespace TagayraASE
                 
 
 
-                else if (storesplitcommands[0].Equals("triangle"))
+                else if (listForCommands[0].Equals("triangle"))
                 {
 
-                    Boolean SideLength = (int.TryParse(storesplitcommands[1], out int valueforsidelength));
+                    Boolean SideLength = (int.TryParse(listForCommands[1], out int valueforsidelength));
 
                     if (SideLength)
                     {
-                        //call the DrawTriangle method of Cursor Class
+                        
                         command.DrawTriangle(command, GiveBoolForFillColor, valueforsidelength);
                         pictureBox1.Refresh();
                     }
@@ -126,15 +129,14 @@ namespace TagayraASE
                 }
 
 
-                else if (storesplitcommands[0].Equals("circle"))
+                else if (listForCommands[0].Equals("circle"))
                 {
 
-                    Boolean Radius = (int.TryParse(storesplitcommands[1], out int valueforradius));
+                    Boolean Radius = (int.TryParse(listForCommands[1], out int valueforradius));
 
                     if (Radius)
                     {
 
-                        //call the DrawCircle method of Cursor Class
                         command.DrawCircle(command, GiveBoolForFillColor, valueforradius);
                         pictureBox1.Refresh();
 
@@ -142,13 +144,13 @@ namespace TagayraASE
                     
                 }
 
-                else if (storesplitcommands[0].Equals("moveTo"))
+                else if (listForCommands[0].Equals("move"))
 
                 {
-                    //perform moveTo
-                    string[] splitnumber = storesplitcommands[1].Split(',');
-                    Boolean xaxis = (int.TryParse(splitnumber[0], out int valueforxaxis));
-                    Boolean yaxis = (int.TryParse(splitnumber[1], out int valueforyaxis));
+               
+                    Boolean xaxis = (int.TryParse(listForCommands[1], out int valueforxaxis));
+                    Boolean yaxis = (int.TryParse(listForCommands[2], out int valueforyaxis));
+                    
 
                     if (xaxis == true && yaxis == true)
                     {
@@ -162,14 +164,10 @@ namespace TagayraASE
                 }
 
 
-                else if (storesplitcommands[0].Equals("DrawTo"))
+                else if (listForCommands[0].Equals("DrawTo"))
                 {
-
-                    //darw a line
-
-                    string[] splitnumber = storesplitcommands[1].Split(',');
-                    Boolean xaxis = (int.TryParse(splitnumber[0], out int valueforxaxis));
-                    Boolean yaxis = (int.TryParse(splitnumber[1], out int valueforyaxis));
+                    Boolean xaxis = (int.TryParse(listForCommands[1], out int valueforxaxis));
+                    Boolean yaxis = (int.TryParse(listForCommands[2], out int valueforyaxis));
 
                     if (xaxis && yaxis)
                     {
@@ -181,22 +179,19 @@ namespace TagayraASE
                 }
 
 
-                else if (storesplitcommands[0].Equals("pen"))
+                else if (listForCommands[0].Equals("pen"))
 
                 {
-                    if (storesplitcommands.Length == 2)
-                    {
+     
 
-                        //set pen color
+                        command.PenColor(listForCommands[1], pen);
 
-                        command.PenColor(storesplitcommands[1], pen);
-
-                        //if pen color out of given color
-                        if (storesplitcommands[1].Equals("red") || storesplitcommands[1].Equals("blue")
-                            || storesplitcommands[1].Equals("green") || storesplitcommands[1].Equals("yellow"))
+                      
+                        if (listForCommands[1].Equals("yellow") || listForCommands[1].Equals("red")
+                            || listForCommands[1].Equals("purple") || listForCommands[1].Equals("orange"))
                         {
 
-                            //
+                            
                             if (!string.IsNullOrEmpty(textBox1.Text) & string.IsNullOrEmpty(textBox2.Text))
                             {
                                 MessageBox.Show("PEN COLOR CHANGED");
@@ -206,18 +201,18 @@ namespace TagayraASE
 
                        
 
-                    }
+                 }
 
 
-                }
+                
 
 
-                else if (storesplitcommands[0].Equals("fill"))
+                else if (listForCommands[0].Equals("fill"))
                 {
 
                     //turn fill on or off
 
-                    if (command.Fill(storesplitcommands[1]))
+                    if (command.Fill(listForCommands[1]))
                     {
                         GiveBoolForFillColor = true;
 
@@ -233,7 +228,7 @@ namespace TagayraASE
 
 
 
-                else if (storesplitcommands[0].Equals("reset"))
+                else if (listForCommands[0].Equals("reset"))
                 {
                     // Reset the pen position
 
@@ -244,21 +239,29 @@ namespace TagayraASE
                 }
 
 
-                else if (storesplitcommands[0].Equals("clear"))
+                else if (listForCommands[0].Equals("clear"))
                 {
                     // Clear the canvas
 
-                    g.Clear(Color.SlateGray);
+                    g.Clear(Color.Gray);
                     pictureBox1.Refresh();
                 }
 
-                
-
-
-            
+    
 
             
         }
 
+
+        private void textBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+
         }
+
+        private void textBox2_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+    }
     }

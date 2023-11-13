@@ -15,13 +15,13 @@ namespace TagayraASE
        public  int positiony;
        public Brush brush;
 
-        public Shape(Graphics g, Pen pen,int positionx ,int positiony) 
+        public Shape(Graphics g, Pen pen,int positionx ,int positiony ,Brush brush) 
         {
             this.g = g;
             this.pen = pen;
             this.positionx = positionx;
             this.positiony = positiony;
-
+            this.brush = brush;
 
           
         
