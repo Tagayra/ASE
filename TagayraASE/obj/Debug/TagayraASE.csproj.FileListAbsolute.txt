@@ -8,3 +8,13 @@ C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.csproj.Ge
 C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.csproj.CoreCompileInputs.cache
 C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.exe
 C:\Users\ISHRA\source\repos\TagayraASE\TagayraASE\obj\Debug\TagayraASE.pdb
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\bin\Debug\TagayraASE.exe.config
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\bin\Debug\TagayraASE.exe
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\bin\Debug\TagayraASE.pdb
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.csproj.AssemblyReference.cache
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.Form1.resources
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.Properties.Resources.resources
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.csproj.GenerateResource.cache
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.csproj.CoreCompileInputs.cache
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.exe
+C:\Users\Tagayra\source\repos\ASE\TagayraASE\obj\Debug\TagayraASE.pdb

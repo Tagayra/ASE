@@ -9,22 +9,18 @@ namespace TagayraASE
 {
     public abstract class Shape
     {
-       public Graphics g;
-       public  Pen pen;
-       public int positionx;
-       public  int positiony;
-       public Brush brush;
+        public Graphics g;
+        public Pen pen;
+        public int positionx;
+        public int positiony;
 
-        public Shape(Graphics g, Pen pen,int positionx ,int positiony ,Brush brush) 
+
+        public Shape(Graphics g, Pen pen, int positionx, int positiony)
         {
             this.g = g;
             this.pen = pen;
             this.positionx = positionx;
             this.positiony = positiony;
-            this.brush = brush;
-
-          
-        
         }
 
     }

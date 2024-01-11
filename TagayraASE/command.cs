@@ -6,28 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
-
 
 namespace TagayraASE
 {
-    
+
     public class Command : Shape
     {
+        /* private Boolean fillEnabled;
+         private Color penColor;*/
+
         Boolean give = false;
-        int xaxis2, yaxis2;
+        //public Dictionary<string, Variable> variables;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Command"/> class.
-        /// </summary>
-        /// <param name="g">The graphics object used for drawing.</param>
-        /// <param name="pen">The pen used for drawing outlines.</param>
-        /// <param name="positionx">The initial x-coordinate of the drawing position.</param>
-        /// <param name="positiony">The initial y-coordinate of the drawing position.</param>
-        /// <param name="brush">The brush used for filling shapes.</param>
-        public Command(Graphics g, Pen pen, int positionx, int positiony, Brush brush) : base(g, pen, positionx, positiony,brush)
+        public Command(Graphics g, Pen pen, int positionx, int positiony) : base(g, pen, positionx, positiony)
         {
-
         }
 
         /// <summary>
@@ -37,12 +29,23 @@ namespace TagayraASE
         /// <param name="xaxis2">The x-coordinate to draw the line to.</param>
         /// <param name="yaxis2">The y-coordinate to draw the line to.</param>
 
+        // Inside the Command class
         public void DrawTo(Command command, int xaxis2, int yaxis2)
         {
+            if (xaxis2 < 0 || yaxis2 < 0)
+            {
+                throw new ArgumentException("Invalid arguments. Coordinates must be non-negative.");
+            }
+
             g = command.g;
             g.DrawLine(command.pen, command.positionx, command.positiony, xaxis2, yaxis2);
 
+            // Update the position to the new endpoint
+            command.positionx = xaxis2;
+            command.positiony = yaxis2;
         }
+
+
 
         /// <summary>
         /// Sets the fill state based on the provided command.
@@ -51,21 +54,23 @@ namespace TagayraASE
         /// <returns>True if the fill state is 'on', false if 'off'.</returns>
         public Boolean Fill(string command)
         {
-
-            if (command.Equals("on"))   //IF ON
+            if (command.Equals("on"))   // IF ON
             {
                 give = true;
-
-
             }
-            else if (command.Equals("off")) //ELSE IF OFF
+            else if (command.Equals("off")) // ELSE IF OFF
             {
                 give = false;
-
+            }
+            else
+            {
+                // Throw ArgumentException for invalid command
+                throw new ArgumentException("Invalid fill command", nameof(command));
             }
 
             return give;
         }
+
 
         /// <summary>
         /// Sets the pen color based on the provided color name.
@@ -100,6 +105,37 @@ namespace TagayraASE
 
 
             }
+            else if (getcolor.Equals("white"))
+            {
+                pen.Color = Color.White;
+
+
+            }
+            else if (getcolor.Equals("blue"))
+            {
+                pen.Color = Color.Blue;
+
+
+            }
+            else if (getcolor.Equals("pink"))
+            {
+                pen.Color = Color.Pink;
+
+
+            }
+            else if (getcolor.Equals("green"))
+            {
+                pen.Color = Color.Green;
+
+
+            }
+            else
+            {
+                // Throw an exception for unsupported colors before modifying the pen's color
+                throw new ArgumentException($"Invalid color: {getcolor}", nameof(getcolor));
+            }
+
+
             return pen.Color;
         }
 
@@ -110,99 +146,92 @@ namespace TagayraASE
         /// <param name="command">The Command object.</param>
         /// <param name="onoroff">True to fill the circle, false to draw the outline.</param>
         /// <param name="radius">The radius of the circle.</param>
-        public void DrawCircle(Command command, Boolean onoroff, int radius)
+        public void DrawCircle(Command command, bool onoroff, object radius)
         {
+            if (!int.TryParse(radius.ToString(), out int parsedRadius) || parsedRadius <= 0)
+            {
+                throw new ArgumentException("Invalid radius value", nameof(radius));
+            }
+
             if (onoroff.Equals(false))
             {
-
-                g.DrawEllipse(command.pen, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);    //graphics to draw a circle
-
+                g.DrawEllipse(command.pen, command.positionx - parsedRadius, command.positiony - parsedRadius, 2 * parsedRadius, 2 * parsedRadius);
             }
             else if (onoroff.Equals(true))
             {
-
-                g.FillEllipse(command.brush, command.positionx - radius, command.positiony - radius, 2 * radius, 2 * radius);
-                //pictureBox1.Refresh();
+                g.FillEllipse(new SolidBrush(command.pen.Color), command.positionx - parsedRadius, command.positiony - parsedRadius, 2 * parsedRadius, 2 * parsedRadius);
             }
-
         }
 
-        /// <summary>
-        /// Draws a rectangle on the canvas.
-        /// </summary>
-        /// <param name="command">The Command object.</param>
-        /// <param name="onandoff">True to fill the rectangle, false to draw the outline.</param>
-        /// <param name="height">The height of the rectangle.</param>
-        /// <param name="width">The width of the rectangle.</param>
         public void DrawRectangle(Command command, Boolean onandoff, int height, int width)
         {
+            if (!int.TryParse(height.ToString(), out int parsedHeight) || parsedHeight <= 0)
+            {
+                throw new ArgumentException("Invalid height value", nameof(height));
+            }
+
+            if (!int.TryParse(width.ToString(), out int parsedWidth) || parsedWidth <= 0)
+            {
+                throw new ArgumentException("Invalid width value", nameof(width));
+            }
+
             if (onandoff.Equals(true))
             {
-                g.FillRectangle(command.brush, command.positionx - (width / 2), command.positiony - (height / 2), width, height);
+                g.FillRectangle(new SolidBrush(command.pen.Color), command.positionx - (parsedWidth / 2), command.positiony - (parsedHeight / 2), parsedWidth, parsedHeight);
             }
             else if (onandoff.Equals(false))
             {
-
-                g.DrawRectangle(command.pen, command.positionx - (width / 2), command.positiony - (height / 2), width, height);
-
+                g.DrawRectangle(command.pen, command.positionx - (parsedWidth / 2), command.positiony - (parsedHeight / 2), parsedWidth, parsedHeight);
             }
         }
-        /// <summary>
-        /// Draws an equilateral triangle on the canvas.
-        /// </summary>
-        /// <param name="command">The Command object.</param>
-        /// <param name="onoroff">True to fill the triangle, false to draw the outline.</param>
-        /// <param name="sidelength">The side length of the triangle.</param>
-      
-        public void DrawTriangle(Command command, Boolean onoroff, int sidelength)
+
+
+        public void DrawTriangle(Command command, bool onoroff, object sidelength)
         {
+            if (!int.TryParse(sidelength.ToString(), out int parsedsidelength) || parsedsidelength <= 0)
+            {
+                throw new ArgumentException("Invalid triangle value", nameof(sidelength));
+            }
+
             if (onoroff.Equals(true))
             {
-                float height = (float)(sidelength + Math.Sqrt(3) / 2);
-                double halfSide = sidelength / 2.0;
+                float height = (float)(parsedsidelength + Math.Sqrt(3) / 2);
+                double halfSide = parsedsidelength / 2.0;
 
-                // Calculate the coordinates of the vertices based on the midpoint
                 Point vertex1 = new Point((int)(command.positionx - halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
                 Point vertex2 = new Point((int)(command.positionx + halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
                 Point vertex3 = new Point(command.positionx, (int)(command.positiony + 2 * halfSide / Math.Sqrt(3)));
 
                 Point[] trianglePoints = new Point[]
-            {
-            vertex1,vertex2,vertex3
+                {
+            vertex1, vertex2, vertex3
+                };
 
-            };
-                g = command.g;
-                g.FillPolygon(command.brush, trianglePoints);
+                g.FillPolygon(new SolidBrush(command.pen.Color), trianglePoints);
             }
             else if (onoroff.Equals(false))
             {
-                float height = (float)(sidelength + Math.Sqrt(3) / 2);
-                double halfSide = sidelength / 2.0;
+                float height = (float)(parsedsidelength + Math.Sqrt(3) / 2);
+                double halfSide = parsedsidelength / 2.0;
 
-                // Calculate the coordinates of the vertices based on the midpoint
                 Point vertex1 = new Point((int)(command.positionx - halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
                 Point vertex2 = new Point((int)(command.positionx + halfSide), (int)(command.positiony - halfSide / Math.Sqrt(3)));
                 Point vertex3 = new Point(command.positionx, (int)(command.positiony + 2 * halfSide / Math.Sqrt(3)));
 
                 Point[] trianglePoints = new Point[]
-            {
-                vertex1,vertex2,vertex3
+                {
+                    vertex1, vertex2, vertex3
+                };
 
-            };
-
-                g = command.g;
                 g.DrawPolygon(command.pen, trianglePoints);
-
             }
-
-
-
-
         }
+
 
 
 
     }
-}     
 
 
+
+}

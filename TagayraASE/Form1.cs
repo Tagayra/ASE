@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,20 +12,20 @@ using System.Windows.Forms;
 
 namespace TagayraASE
 {
-
     /// <summary>
-    /// Main form for the TagayraASE application.
+    /// Main form for the GraphicalProgrammingEnvironmentASE application.
     /// </summary>
     public partial class Form1 : Form
     {
-        Bitmap bitmap1 = new Bitmap(400, 400);
-        Bitmap bitmap2 = new Bitmap(400, 400);
-        Pen pen = new Pen(Color.HotPink, 2);
-        Brush brush = new SolidBrush(Color.Black);
+
+        Bitmap bitmap1 = new Bitmap(411, 414);
+        Bitmap bitmap2 = new Bitmap(411, 414);
+        Pen pen = new Pen(Color.Yellow, 2);
         Boolean GiveBoolForFillColor = false;
-        Color Backgroudcolor = Color.Gray;
+        Color Backgroudcolor = Color.Black;
         Graphics g;
         Point penposition;
+        private string feedbackMessage;
 
 
         /// <summary>
@@ -35,10 +36,9 @@ namespace TagayraASE
             penposition = new Point(10, 10);
             InitializeComponent();
             g = Graphics.FromImage(bitmap1);
-            g.Clear(Color.Gray);   
+            g.Clear(Color.Black);
 
         }
-
 
         /// <summary>
         /// Event handler for painting the PictureBox.
@@ -47,252 +47,291 @@ namespace TagayraASE
         /// <param name="e">The <see cref="PaintEventArgs"/> instance containing the event data.</param>
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g =e.Graphics;
+            Graphics g = e.Graphics;
             g.DrawImageUnscaled(bitmap1, 0, 0);
-            g.DrawImageUnscaled(bitmap2 , 0, 0);
-            e.Graphics.DrawEllipse(pen, penposition.X, penposition.Y, 10,10);
+            g.DrawImageUnscaled(bitmap2, 0, 0);
+            e.Graphics.DrawEllipse(pen, penposition.X, penposition.Y, 10, 10);
 
         }
-
         /// <summary>
         /// Event handler for the button click event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void button1_Click(object sender, EventArgs e)
+
+        public void button1_Click(object sender, EventArgs e)
         {
-            try
+
+            if (!string.IsNullOrEmpty(textBox1.Text) & string.IsNullOrEmpty(textBox2.Text))
             {
-                if (!string.IsNullOrEmpty(textBox1.Text) & string.IsNullOrEmpty(textBox2.Text))
-            {
-                
+
                 string[] converttostring = textBox1.Lines;
                 foreach (string commandline in converttostring)
                 {
-                    string stroreSinglelineCode = Convert.ToString(commandline);
-                    string[] addCommandToList = stroreSinglelineCode.Split(' ');
+                    string storeSinglelineCode = Convert.ToString(commandline);
+                    storeSinglelineCode = storeSinglelineCode.ToLower();
+                    string[] addCommandToList = storeSinglelineCode.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     CommandsInCommandLine(addCommandToList);          //function that runs all command 
                 }
-
-
             }
 
             else if (!string.IsNullOrEmpty(textBox2.Text) & string.IsNullOrEmpty(textBox1.Text))
             {
                 string converttostring = textBox2.Text.ToString();
-               // converttostring = converttostring.ToLower();
-                string[] getcommand = converttostring.Split(' ');
+                converttostring = converttostring.ToLower();
+                string[] getcommand = converttostring.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 CommandsInCommandLine(getcommand);
-
-
             }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error processing commands: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
 
         }
-
 
         /// <summary>
         /// Processes the commands provided in the command line.
         /// </summary>
         /// <param name="listForCommands">The list of commands to be processed.</param>
-
         public void CommandsInCommandLine(string[] listForCommands)
         {
+            Command command = new Command(g, pen, penposition.X, penposition.Y);
 
-            try
+            if (listForCommands == null || listForCommands.Length == 0)
             {
+                SetFeedbackMessage("No command entered.");
+                return;
+            }
 
-
-                Command command = new Command(g,pen,penposition.X, penposition.Y,brush);
-           
-                
-                 if (listForCommands[0].Equals("rectangle"))
-                {
-                  
-
-                    Boolean width = (int.TryParse(listForCommands[1], out int valueforwidth));
-                    Boolean height = (int.TryParse(listForCommands[2], out int valueforheight));
-            
-                    if (width && height)
+            switch (listForCommands[0].ToLower())
+            {
+                case "rectangle":
+                    if (listForCommands.Length == 3)
                     {
-
-                       
-                        command.DrawRectangle(command, GiveBoolForFillColor, valueforheight, valueforwidth);
-                        pictureBox1.Refresh();
-                    }
-                   
-                }
-
-
-                
-
-
-                else if (listForCommands[0].Equals("triangle"))
-                {
-                  
-                    Boolean SideLength = (int.TryParse(listForCommands[1], out int valueforsidelength));
-
-                    if (SideLength)
-                    {
-                        
-                        command.DrawTriangle(command, GiveBoolForFillColor, valueforsidelength);
-                        pictureBox1.Refresh();
-                    }
-                   
-                }
-
-
-                else if (listForCommands[0].Equals("circle"))
-                {
-                   
-
-                    Boolean Radius = (int.TryParse(listForCommands[1], out int valueforradius));
-
-                    if (Radius)
-                    {
-
-                        command.DrawCircle(command, GiveBoolForFillColor, valueforradius);
-                        pictureBox1.Refresh();
-
-                    }
-                    
-                }
-
-                else if (listForCommands[0].Equals("move"))
-
-                {
-                   
-
-                    Boolean xaxis = (int.TryParse(listForCommands[1], out int valueforxaxis));
-                    Boolean yaxis = (int.TryParse(listForCommands[2], out int valueforyaxis));
-                    
-
-                    if (xaxis == true && yaxis == true)
-                    {
-                        //set position of the pen
-                        penposition = new Point(valueforxaxis, valueforyaxis);
-                        pictureBox1.Refresh();
-
-                    }
-                   
-
-                }
-
-
-                else if (listForCommands[0].Equals("DrawTo"))
-                {
-                   
-                    Boolean xaxis = (int.TryParse(listForCommands[1], out int valueforxaxis));
-                    Boolean yaxis = (int.TryParse(listForCommands[2], out int valueforyaxis));
-
-                    if (xaxis && yaxis)
-                    {
-                        //call the DrawToPosition method of Cursor Class
-                        command.DrawTo(command, valueforyaxis, valueforyaxis);
-                        pictureBox1.Refresh();
-                    }
-                    
-                }
-
-
-                else if (listForCommands[0].Equals("pen"))
-
-                {
-                    
-
-                    command.PenColor(listForCommands[1], pen);
-
-                      
-                        if (listForCommands[1].Equals("yellow") || listForCommands[1].Equals("red")
-                            || listForCommands[1].Equals("purple") || listForCommands[1].Equals("orange"))
+                        if (int.TryParse(listForCommands[1], out int valueForWidth) &&
+                            int.TryParse(listForCommands[2], out int valueForHeight))
                         {
-
-                            
-                            if (!string.IsNullOrEmpty(textBox1.Text) & string.IsNullOrEmpty(textBox2.Text))
+                            if (valueForWidth > 0 && valueForHeight > 0)
                             {
-                                MessageBox.Show("PEN COLOR CHANGED");
+                                command.DrawRectangle(command, GiveBoolForFillColor, valueForHeight, valueForWidth);
+                                pictureBox1.Refresh();
                             }
+                            else
+                            {
+                                SetFeedbackMessage("Width and height must be greater than zero for rectangle command.");
+                            }
+                        }
+                        else
+                        {
+                            SetFeedbackMessage("Invalid arguments for rectangle command.");
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorrect amount of arguments for rectangle command");
+                    }
+                    break;
+
+
+                case "triangle":
+                    if (listForCommands.Length == 2 || listForCommands.Length == 4)
+                    {
+                        if (int.TryParse(listForCommands[1], out int valueforsidelength))
+                        {
+                            if (valueforsidelength > 0)
+                            {
+                                command.DrawTriangle(command, GiveBoolForFillColor, valueforsidelength);
+                                pictureBox1.Refresh();
+                            }
+                            else
+                            {
+                                SetFeedbackMessage("Negative or zero parameter for triangle command.");
+                            }
+                        }
+                        else
+                        {
+                            SetFeedbackMessage("Invalid argument for triangle command.");
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorect amount of arguments for triangle command.");
+                    }
+                    break;
+
+                case "circle":
+                    if (listForCommands.Length == 2)
+                    {
+                        if (int.TryParse(listForCommands[1], out int valueforradius))
+                        {
+                            if (valueforradius > 0)
+                            {
+                                command.DrawCircle(command, GiveBoolForFillColor, valueforradius);
+                                pictureBox1.Refresh();
+                            }
+                            else
+                            {
+                                SetFeedbackMessage("Negative or zero parameter for circle command.");
+                            }
+                        }
+                        else
+                        {
+                            SetFeedbackMessage("Invalid argument for circle command.");
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorect amount of arguments for circle command.");
+                    }
+                    break;
+
+                case "moveto":
+                    if (listForCommands.Length == 3)
+                    {
+                        if (int.TryParse(listForCommands[1], out int valueforxaxis) &&
+                            int.TryParse(listForCommands[2], out int valueforyaxis))
+                        {
+                            penposition = new Point(valueforxaxis, valueforyaxis);
+                            pictureBox1.Refresh();
+                        }
+                        else
+                        {
+                            SetFeedbackMessage("Invalid arguments for moveto command.");
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorrect amount of arguments for moveto command.");
+                    }
+                    break;
+
+                case "drawto":
+                    if (listForCommands.Length == 3)
+                    {
+                        if (int.TryParse(listForCommands[1], out int valueforxaxis) &&
+                            int.TryParse(listForCommands[2], out int valueforyaxis))
+                        {
+                            command.DrawTo(command, valueforxaxis, valueforyaxis);
+                            penposition = new Point(valueforxaxis, valueforyaxis);
+                            pictureBox1.Refresh();
+                        }
+                        else
+                        {
+                            SetFeedbackMessage("Invalid arguments for drawto command.");
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorect amount of arguments for drawto command.");
+                    }
+                    break;
+
+                case "pen":
+                    if (listForCommands.Length == 2)
+                    {
+                        if (listForCommands[1].Equals("yellow") || listForCommands[1].Equals("white") ||
+                            listForCommands[1].Equals("red") || listForCommands[1].Equals("green") ||
+                            listForCommands[1].Equals("blue") || listForCommands[1].Equals("pink") ||
+                            listForCommands[1].Equals("purple") || listForCommands[1].Equals("orange"))
+                        {
+                            command.PenColor(listForCommands[1], pen);
 
                         }
                         else
                         {
-                           MessageBox.Show("try entering these colors yellow purple red orange");
-
+                            MessageBox.Show("Try entering one of these colors: green, blue, pink, white, yellow, orange, red, purple");
                         }
-
-                       
-
-                 }
-
-
-                
-
-
-                else if (listForCommands[0].Equals("fill"))
-                {
-                    
-
-                    //turn fill on or off
-
-                    if (command.Fill(listForCommands[1]))
-                    {
-                        GiveBoolForFillColor = true;
-
                     }
                     else
                     {
-                        GiveBoolForFillColor = false;
+                        SetFeedbackMessage("Incorect amount of arguments for pen command.");
+                    }
+                    break;
+
+                case "fill":
+                    if (listForCommands.Length == 2)
+                    {
+                        try
+                        {
+                            if (command.Fill(listForCommands[1]))
+                            {
+                                GiveBoolForFillColor = true;
+                            }
+                            else
+                            {
+                                GiveBoolForFillColor = false;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            SetFeedbackMessage("An error occurred: " + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Incorrect amount of arguments for fill command.");
+                    }
+                    break;
+
+                case "reset":
+                    // Reset the pen position
+                    if (listForCommands.Length == 1)
+                    {
+                        penposition = new Point(10, 10);
+                        g.Clear(Color.Black);
+                        pictureBox1.Refresh();
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Reset does not take arguements.");
                     }
 
-                    
-                }
+                    break;
 
-
-
-
-                else if (listForCommands[0].Equals("reset"))
-                {
-                   
-                    // Reset the pen position
-
-                    penposition = new Point(10, 10);
-                    g.DrawRectangle(pen, penposition.X, penposition.Y, 10, 10);
-                    pictureBox1.Refresh();
-
-                }
-
-
-                else if (listForCommands[0].Equals("clear"))
-                {
-                    
+                case "clear":
                     // Clear the canvas
+                    if (listForCommands.Length == 1)
+                    {
+                        g.Clear(Color.Black);
+                        pictureBox1.Refresh();
+                    }
+                    else
+                    {
+                        SetFeedbackMessage("Clear does not take arguements.");
+                    }
 
-                    g.Clear(Color.Gray);
-                    pictureBox1.Refresh();
-                }
-                else
-                {
-                    throw new FormatException("wrong command ");
-                }
+                    break;
 
+                default:
+                    SetFeedbackMessage($"Invalid command: {listForCommands[0]}");
+                    break;
             }
-            catch (FormatException ex)
-            {
-                MessageBox.Show("Invalid input format: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-
         }
 
+
+        private void SetFeedbackMessage(string message)
+        {
+            feedbackMessage = message;
+            // Display the feedback message, for example, in a label or MessageBox
+            MessageBox.Show(message);
+        }
+
+
+        public Point PenPosition
+        {
+            get { return penposition; }
+        }
+
+        public Color BackgroundColor
+        {
+            get { return Backgroudcolor; }
+        }
+
+        public TextBox TextBox1
+        {
+            get { return textBox1; }
+        }
+
+        public string FeedbackMessage
+        {
+            get { return feedbackMessage; }
+        }
 
         private void textBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -304,17 +343,16 @@ namespace TagayraASE
 
         }
 
-        /// <summary>
+        // <summary>
         /// Event handler for the button click event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void button3_Click(object sender, EventArgs e)
+        public void button3_Click(object sender, EventArgs e)
         {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "\"Text Files (.txt)|*.txt|All Files|*.*";  
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "\"Text Files (.txt)|*.txt|All Files|*.*";
             openFileDialog.DefaultExt = "txt";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -324,16 +362,16 @@ namespace TagayraASE
 
                     using (StreamReader reader = new StreamReader(openFileDialog.FileName))
                     {
+                        g.Clear(Color.Black);
                         while (!reader.EndOfStream)
                         {
 
                             string command = reader.ReadLine();
                             string[] singlecommand = command.Split(' ');
-                            g.Clear(Color.SlateGray);  //clear pictureboard
                             CommandsInCommandLine(singlecommand);
                         }
                     }
-                    MessageBox.Show("LOADED COMMAND");
+                    MessageBox.Show("Successfully Loaded File");
                 }
                 catch
                 {
@@ -341,11 +379,8 @@ namespace TagayraASE
 
                 }
             }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error opening file dialog: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+
 
         }
 
@@ -354,11 +389,11 @@ namespace TagayraASE
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void button4_Click(object sender, EventArgs e)
+        public void button4_Click(object sender, EventArgs e)
         {
-            try
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
 
             saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
             saveFileDialog.DefaultExt = "txt";
@@ -378,24 +413,27 @@ namespace TagayraASE
                         }
                     }
 
-                    MessageBox.Show("File Has Been Saved");
+                    MessageBox.Show("FILE ADDED");
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("There Was An Error in Saving The File");
+                    MessageBox.Show("ERROR IN SAVING THE FILE");
                 }
 
             }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error opening save file dialog: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
 
         }
 
-        
-        
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
-    }
+}
